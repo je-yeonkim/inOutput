@@ -115,26 +115,39 @@ public class BoardDAO {
 		}
 	}
 	
-	public BoardDTO selectContent(int no) {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		
+	public void updateHits(int no) {
+		String sql = "UPDATE session_board SET hits=hits+1 WHERE no=?";
+		PreparedStatement ps= null;
 		try {
-			ps=con.prepareStatement("SELECT *FROM session_board WHERE no=?");
+			ps = con.prepareStatement(sql);
 			ps.setInt(1, no);
-			rs=ps.executeQuery();
+			ps.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public BoardDTO selectNo(int no) {
+		String sql = "SELECT * FROM session_board WHERE no=?";
+		PreparedStatement ps= null;
+		ResultSet rs = null;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, no);
+			rs = ps.executeQuery();
 			if(rs.next()) {
+				updateHits(no);
 				BoardDTO board = new BoardDTO();
 				board.setNo(rs.getInt("no"));
 				board.setTitle(rs.getString("title"));
 				board.setContent(rs.getString("content"));
-				board.setId("id");
+				board.setId(rs.getString("id"));
 				board.setWriteDate(rs.getString("write_date"));
-				board.setHits(rs.getInt("hits"));
+				board.setHits(rs.getInt("hits")+1);
+				board.setFileName(rs.getString("file_name"));
 				return board;
 			}
-		} catch (SQLException e) {
-			
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

@@ -44,7 +44,9 @@
 		<%for(BoardDTO board : boards) {%>
 			<tr>
 				<td><%=board.getNo() %></td>
-				<td onclick="location.href='boardContent.jps?num='"><%=board.getTitle() %></td>
+				<td onclick="location.href='boardContent.jsp?no=<%=board.getNo() %>'">
+					<%=board.getTitle() %>
+				</td>
 				<td><%=board.getId() %></td>
 				<td><%=board.getWriteDate() %></td>
 				<td><%=board.getHits() %></td>
@@ -59,3 +61,13 @@
 	</table>
 </div>
 <%@ include file="/session_quiz/footer.jsp" %>
+
+
+
+
+
+
+
+
+
+
