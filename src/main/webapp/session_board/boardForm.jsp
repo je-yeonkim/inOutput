@@ -44,7 +44,7 @@
 		<%for(BoardDTO board : boards) {%>
 			<tr>
 				<td><%=board.getNo() %></td>
-				<td><%=board.getTitle() %></td>
+				<td onclick="location.href='boardContent.jps?num='"><%=board.getTitle() %></td>
 				<td><%=board.getId() %></td>
 				<td><%=board.getWriteDate() %></td>
 				<td><%=board.getHits() %></td>
@@ -54,7 +54,7 @@
 			<td colspan="4">
 				<%=result %>
 			</td>
-			<td><button type="button" onclick="location.href='writeForm.jsp'">글쓰기</button></td>
+			<td><button type="button" onclick="location.href='boardWrite.jsp'">글쓰기</button></td>
 		</tr>
 	</table>
 </div>

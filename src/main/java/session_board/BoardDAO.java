@@ -1,10 +1,14 @@
 package session_board;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BoardDAO {
 	private Connection con;
@@ -75,6 +79,67 @@ public class BoardDAO {
 		}
 		return boards;
 	}
+	
+	public int selectMaxNo() {
+		int no = 0;
+		String sql = "SELECT max(no)+1 FROM session_board";
+		PreparedStatement ps= null;
+		ResultSet rs = null;
+		try {
+			ps=con.prepareStatement(sql);
+			rs=ps.executeQuery();
+			if(rs.next()) {
+				no=rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return no;
+	}
+	public void write(BoardDTO board) {
+		String sql = "INSERT INTO session_board VALUES(?,?,?,?,?,?,?)";
+		PreparedStatement ps= null;
+		
+		try {
+			ps=con.prepareStatement(sql);
+			ps.setInt(1, board.getNo());
+			ps.setString(2, board.getTitle());
+			ps.setString(3, board.getContent());
+			ps.setString(4, board.getId());
+			ps.setString(5, board.getWriteDate());
+			ps.setInt(6, board.getHits());
+			ps.setString(7, board.getFileName());
+			ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public BoardDTO selectContent(int no) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps=con.prepareStatement("SELECT *FROM session_board WHERE no=?");
+			ps.setInt(1, no);
+			rs=ps.executeQuery();
+			if(rs.next()) {
+				BoardDTO board = new BoardDTO();
+				board.setNo(rs.getInt("no"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setId("id");
+				board.setWriteDate(rs.getString("write_date"));
+				board.setHits(rs.getInt("hits"));
+				return board;
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }
 /*
 INSERT INTO session_board VALUES(1, '테스트1', '테스트1','tester1','2023-06-20',0,'');
