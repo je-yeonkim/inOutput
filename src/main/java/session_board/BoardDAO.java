@@ -152,6 +152,57 @@ public class BoardDAO {
 		}
 		return null;
 	}
+	
+	public BoardDTO searchForModify(int no) {
+		String sql = "SELECT * FROM session_board WHERE no=?";
+		PreparedStatement ps= null;
+		ResultSet rs = null;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, no);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				BoardDTO board = new BoardDTO();
+				board.setNo(rs.getInt("no"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setId(rs.getString("id"));
+				board.setWriteDate(rs.getString("write_date"));
+				board.setHits(rs.getInt("hits")+1);
+				board.setFileName(rs.getString("file_name"));
+				return board;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public void modify(int no, String title, String content) {
+		String sql = "UPDATE session_board SET title=?, content=? WHERE no=?";
+		PreparedStatement ps= null;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, title);
+			ps.setString(2, content);
+			ps.setInt(3, no);
+			ps.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void delete(int no) {
+		String sql="DELETE FROM session_board WHERE no=?";
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, no);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
 /*

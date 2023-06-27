@@ -163,7 +163,7 @@ public class MemberDAO {
 		return members;
 	}
 	
-	public void disConnection() {
+	public void disconnection() {
 		try {
 			if(con != null) {
 				con.close();
